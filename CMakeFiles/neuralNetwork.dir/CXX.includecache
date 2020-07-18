@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
+stdlib.h
+-
+chrono
+-
+
+/home/davidalk/Documents/neuralNetwork/src/main.cpp
+iostream
+-
+Utils/GeneralFunctions.cpp
+/home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
+

@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -std=c++14   CMakeFiles/neuralNetwork.dir/src/main.cpp.o  -o neuralNetwork 
