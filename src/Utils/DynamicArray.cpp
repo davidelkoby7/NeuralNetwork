@@ -3,6 +3,13 @@
 using namespace Utils;
 
 template<typename T>
+DynamicArray<T>::~DynamicArray()
+{
+    if (this->array_length > 0)
+        delete[] this->array;
+}
+
+template<typename T>
 DynamicArray<T>::DynamicArray()
 {
     this->array_length = 0;
@@ -16,9 +23,9 @@ void DynamicArray<T>::Print()
 }
 
 template<typename T>
-size_t DynamicArray<T>::GetLength()
+size_t DynamicArray<T>::GetLength() const
 {
-    this->array_length;
+    return this->array_length;
 }
 
 template<typename T>
@@ -66,7 +73,7 @@ void DynamicArray<T>::RemoveItem(int index)
 }
 
 template<typename T>
-T& DynamicArray<T>::operator[](int index)
+T& DynamicArray<T>::operator[](int index) const
 {
     return this->array[index];
 }

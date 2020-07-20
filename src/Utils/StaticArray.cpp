@@ -3,10 +3,15 @@
 using namespace Utils;
 
 template <typename T, size_t length>
+StaticArray<T, length>::~StaticArray()
+{
+    // No need to delete[] the mem of the array because it was allocated on the stack
+}
+
+template <typename T, size_t length>
 StaticArray<T, length>::StaticArray()
 {
     this->array_length = length;
-    std::cout << "DavidlkCreated!\n";
 }
 
 template <typename T, size_t length>

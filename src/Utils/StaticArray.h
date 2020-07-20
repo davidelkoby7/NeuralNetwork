@@ -11,6 +11,7 @@ namespace Utils
             int array_length;
             T array[length];
         public:
+            ~StaticArray();
             StaticArray();
             size_t GetLength();
             void ResetArray(T resetValue);
