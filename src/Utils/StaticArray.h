@@ -14,11 +14,13 @@ namespace Utils
             ~StaticArray();
             StaticArray();
             size_t GetLength();
-            void ResetArray(T resetValue);
+            void Fill(T resetValue);
             void Print();
 
             T& operator [](int index);
             StaticArray& operator +(const StaticArray& another_array);
     };
 }
+
+#include "StaticArray.cpp"
 

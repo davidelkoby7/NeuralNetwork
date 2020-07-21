@@ -6,35 +6,27 @@
 
 #IncludeRegexTransform: 
 
-/home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.cpp
-Neuron.h
-/home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.h
-
-/home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.h
-../Utils/DynamicArray.cpp
-/home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.cpp
-../Utils/GeneralFunctions.cpp
-/home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
-
-/home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.cpp
-DynamicArray.h
-/home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.h
-
-/home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.h
-iostream
--
-
 /home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
 stdlib.h
 -
 chrono
 -
 
+/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.cpp
+StaticArray.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
+
+/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
+iostream
+-
+StaticArray.cpp
+/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.cpp
+
 /home/davidalk/Documents/neuralNetwork/src/main.cpp
 iostream
 -
 Utils/GeneralFunctions.cpp
 /home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
-NeuralNetwork/Neuron.cpp
-/home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.cpp
+Utils/StaticArray.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
 

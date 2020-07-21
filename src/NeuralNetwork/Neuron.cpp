@@ -11,7 +11,7 @@ Neuron::Neuron()
     this->m_bias = GeneralFunctions::RandomDouble(-1, 1);
 }
 
-Neuron::Neuron(const double& newValue, const double& newBias, const DynamicArray<Neuron*>& nextLayerNeurons)
+Neuron::Neuron(const double& newValue, const double& newBias, const Utils::DynamicArray<Neuron*>& nextLayerNeurons)
 {
     this->m_value = newValue;
     this->m_bias = newBias;
@@ -42,7 +42,7 @@ double Neuron::GetBias() const
     return this->m_bias;
 }
 
-DynamicArray<Neuron*>& Neuron::GetNextLayerNeurons()
+Utils::DynamicArray<Neuron*>& Neuron::GetNextLayerNeurons()
 {
     return this->m_nextLayerNeurons;
 }

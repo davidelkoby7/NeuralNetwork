@@ -23,3 +23,5 @@ namespace Utils
     };
 }
 
+#include "DynamicArray.cpp"
+

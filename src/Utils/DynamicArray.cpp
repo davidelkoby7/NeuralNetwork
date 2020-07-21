@@ -3,33 +3,33 @@
 using namespace Utils;
 
 template<typename T>
-DynamicArray<T>::~DynamicArray()
+Utils::DynamicArray<T>::~DynamicArray()
 {
     if (this->array_length > 0)
         delete[] this->array;
 }
 
 template<typename T>
-DynamicArray<T>::DynamicArray()
+Utils::DynamicArray<T>::DynamicArray()
 {
     this->array_length = 0;
 }
 
 template<typename T>
-void DynamicArray<T>::Print()
+void Utils::DynamicArray<T>::Print()
 {
     for (size_t i = 0; i < this->array_length; i++)
         std::cout << this->array[i] << std::endl;
 }
 
 template<typename T>
-size_t DynamicArray<T>::GetLength() const
+size_t Utils::DynamicArray<T>::GetLength() const
 {
     return this->array_length;
 }
 
 template<typename T>
-void DynamicArray<T>::AddItem(const T& newItem)
+void Utils::DynamicArray<T>::AddItem(const T& newItem)
 {
     T* new_array = new T[this->array_length + 1];
 
@@ -50,7 +50,7 @@ void DynamicArray<T>::AddItem(const T& newItem)
 }
 
 template<typename T>
-void DynamicArray<T>::RemoveItem(int index)
+void Utils::DynamicArray<T>::RemoveItem(int index)
 {
     T* new_array = new T[this->array_length - 1];
 
@@ -73,13 +73,13 @@ void DynamicArray<T>::RemoveItem(int index)
 }
 
 template<typename T>
-T& DynamicArray<T>::operator[](int index) const
+T& Utils::DynamicArray<T>::operator[](int index) const
 {
     return this->array[index];
 }
 
 template <typename T>
-void DynamicArray<T>::ResetArray(T resetValue)
+void Utils::DynamicArray<T>::ResetArray(T resetValue)
 {
     for (int i = 0; i < this->array_length; i++)
         this->array[i] = resetValue;

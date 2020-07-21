@@ -2,19 +2,17 @@
 
 #include "GeneralFunctions.cpp"
 
-using namespace Utils;
-
-String::~String()
+Utils::String::~String()
 {
     delete[] this->m_string;
 }
 
-String::String()
+Utils::String::String()
 {
     this->m_length = 0;
 }
 
-String::String(const char* newString)
+Utils::String::String(const char* newString)
 {
     this->m_length = GeneralFunctions::StringLength(newString) + 1;
     this->m_string = new char[this->m_length];
@@ -25,12 +23,12 @@ String::String(const char* newString)
     m_string[this->m_length - 1] = '\x00';
 }
 
-void String::Print() const
+void Utils::String::Print() const
 {
     std::cout << this->m_string << std::endl;
 }
 
-void String::SetString(char* newString)
+void Utils::String::SetString(char* newString)
 {
     uint newLength = GeneralFunctions::StringLength(newString);
     char* new_char_array = new char[newLength];
@@ -43,22 +41,22 @@ void String::SetString(char* newString)
     this->m_length = newLength;
 }
 
-char* String::GetString() const
+char* Utils::String::GetString() const
 {
     return this->m_string;
 }
 
-size_t String::GetLength() const
+size_t Utils::String::GetLength() const
 {
     return this->m_length;
 }
 
-const char String::operator [](const int& index) const
+const char Utils::String::operator [](const int& index) const
 {
     return this->m_string[index];
 }
 
-String String::operator +(const String& otherString)
+String Utils::String::operator +(const Utils::String& otherString)
 {
     size_t newLength = this->m_length + otherString.m_length - 1;
     char* newString = new char[newLength];
