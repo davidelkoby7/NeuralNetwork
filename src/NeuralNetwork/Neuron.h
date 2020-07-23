@@ -26,7 +26,9 @@ class Neuron
 
         // Additional Functionallities
         std::string ToString() const;
+        std::string ToStringNoNextLayer() const;
         void Print();
+        void PrintNoNextLayer();
 };
 
 #include "Neuron.cpp"

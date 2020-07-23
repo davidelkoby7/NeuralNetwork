@@ -17,6 +17,7 @@ namespace Utils
             void Fill(T resetValue);
             void Print();
 
+            T& GetItem(int index);
             T& operator [](int index);
             StaticArray& operator +(const StaticArray& another_array);
     };

@@ -39,6 +39,12 @@ void Utils::StaticArray<T, length>::Print()
 }
 
 template <typename T, size_t length>
+T& Utils::StaticArray<T, length>::GetItem(int index)
+{
+    return this->array[index];
+}
+
+template <typename T, size_t length>
 T& Utils::StaticArray<T, length>::operator[](int index)
 {
     if (index >= length)

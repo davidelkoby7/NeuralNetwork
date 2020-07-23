@@ -18,6 +18,7 @@ namespace Utils
             void AddItem(const T& newItem);
             // TODO: void AddItems(const T* newItemsArray);
             void RemoveItem(int index);
+            T& GetItem(int index);
             T& operator [](int index) const;
             void ResetArray(T resetValue);
     };

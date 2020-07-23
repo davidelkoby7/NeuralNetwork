@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Utils/GeneralFunctions.cpp"
-#include "Utils/DynamicArray.h"
+#include "NeuralNetwork/Neuron.h"
 
 #define log(x) std::cout << x << std::endl;
 

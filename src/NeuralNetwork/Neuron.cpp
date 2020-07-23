@@ -16,7 +16,7 @@ Neuron::Neuron(const double& newValue, const double& newBias, const Utils::Dynam
     this->m_value = newValue;
     this->m_bias = newBias;
 
-    for (int i = 0; i < nextLayerNeurons.GetLength(); i++)
+    for (uint i = 0; i < nextLayerNeurons.GetLength(); i++)
     {
         this->m_nextLayerNeurons.AddItem(nextLayerNeurons[i]);
     }
@@ -47,6 +47,16 @@ Utils::DynamicArray<Neuron*>& Neuron::GetNextLayerNeurons()
     return this->m_nextLayerNeurons;
 }
 
+std::string Neuron::ToStringNoNextLayer() const
+{
+    std::string neuronString = "{\nvalue: ";
+    neuronString += std::to_string(this->m_value);
+    neuronString += ",\nbias: ";
+    neuronString += std::to_string(this->m_bias);
+    neuronString += "\n}";
+    return neuronString;
+}
+
 std::string Neuron::ToString() const
 {
     std::string neuronString = "{\nvalue: ";
@@ -71,6 +81,11 @@ std::string Neuron::ToString() const
 void Neuron::Print()
 {
     std::cout << this->ToString() << std::endl;
+}
+
+void Neuron::PrintNoNextLayer()
+{
+    std::cout << this->ToStringNoNextLayer() << std::endl;
 }
 
 // Overloading the << operator so String will be accepted by std::cout

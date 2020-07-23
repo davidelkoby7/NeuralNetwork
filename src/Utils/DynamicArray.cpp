@@ -72,6 +72,12 @@ void Utils::DynamicArray<T>::RemoveItem(int index)
     this->array = new_array;
 }
 
+template <typename T>
+T& Utils::DynamicArray<T>::GetItem(int index)
+{
+    return this->array[index];
+}
+
 template<typename T>
 T& Utils::DynamicArray<T>::operator[](int index) const
 {
