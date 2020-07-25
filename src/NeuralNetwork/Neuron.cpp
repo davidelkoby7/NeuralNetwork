@@ -12,6 +12,13 @@ Neuron::Neuron()
     this->m_delta = 0;
 }
 
+Neuron::Neuron(const double& newValue, const double& newBias)
+{
+    this->m_value = newValue;
+    this->m_bias = newBias;
+    this->m_delta = 0;
+}
+
 Neuron::Neuron(const double& newValue, const double& newBias, const Utils::DynamicArray<Neuron*>& nextLayerNeurons)
 {
     this->m_value = newValue;

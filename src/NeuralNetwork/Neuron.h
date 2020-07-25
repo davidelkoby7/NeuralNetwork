@@ -14,6 +14,7 @@ class Neuron
         // Constructos and Destructor
         ~Neuron();
         Neuron();
+        Neuron(const double& newValue, const double& newBias);
         Neuron(const double& newValue, const double& newBias, const Utils::DynamicArray<Neuron*>& nextLayerNeurons);
         
         // Setters

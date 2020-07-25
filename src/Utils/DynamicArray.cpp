@@ -39,7 +39,7 @@ void Utils::DynamicArray<T>::AddItem(const T& newItem)
     // Releasing the memory of array
     if (this->array_length != 0)
     {
-        delete this->array;
+        delete[] this->array;
         this->array = nullptr;
     }
 
@@ -63,7 +63,7 @@ void Utils::DynamicArray<T>::RemoveItem(int index)
     }
 
     // Releasing the memory of array
-    delete this->array;
+    delete[] this->array;
     this->array = nullptr;
 
     this->array_length -= 1;

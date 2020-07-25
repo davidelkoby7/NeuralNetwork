@@ -1,0 +1,11 @@
+learning_rate = 0.1
+num_of_layers = 3
+num_of_neurons_per_layers = 3,2,2
+biases_layer_0 = 0.887485,-0.800804,-0.218861
+biases_layer_1 = -0.464237,-0.474896
+biases_layer_2 = 0.000297576,0.993118
+weights_layer_0_neuron_0 = 1.69579e-09,1.73046e-09
+weights_layer_0_neuron_1 = -4.23947e-10,-4.32616e-10
+weights_layer_0_neuron_2 = -8.47894e-10,-8.65232e-10
+weights_layer_1_neuron_0 = 3.50161e-06,-6.37055e-05
+weights_layer_1_neuron_1 = 3.582e-06,-6.51682e-05

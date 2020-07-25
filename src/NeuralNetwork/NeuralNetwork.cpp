@@ -1,46 +1,46 @@
 #include "NeuralNetwork.h"
 
-template <int numOfLayers>
-NeuralNetwork<numOfLayers>::~NeuralNetwork()
+NeuralNetwork::~NeuralNetwork()
 {
 }
 
-template <int numOfLayers>
-NeuralNetwork<numOfLayers>::NeuralNetwork(const Utils::DynamicArray<int>& numOfNeuronsForLayers, double (*newActivationFunction)(const double& x), double (*newActivationFunctionDerivative)(const double& x), const double& newLeariningRate)
+NeuralNetwork::NeuralNetwork(const int& newNumOfLayers,const Utils::DynamicArray<int>& numOfNeuronsPerLayer, double (*newActivationFunction)(const double& x), double (*newActivationFunctionDerivative)(const double& x), const double& newLeariningRate)
 {
     // Setting the activation function
     this->activationFunction = newActivationFunction;
     this->activationFunctionDerivative = newActivationFunctionDerivative;
+
     this->learningRate = newLeariningRate;
+    this->numOfLayers = newNumOfLayers;
 
     // Initializing a random valued layers for the network
-    for (int i = 0; i < numOfLayers; i++)
+    for (int i = 0; i < this->numOfLayers; i++)
     {
         // Creating the new layer
         Utils::DynamicArray<Neuron*>* newLayer = new Utils::DynamicArray<Neuron*>();
 
         // Filling the layer with random nodes
-        for (int j = 0; j < numOfNeuronsForLayers[i]; j++)
+        for (int j = 0; j < numOfNeuronsPerLayer[i]; j++)
         {
             Neuron *n = new Neuron();
             newLayer->AddItem(n);
         }
 
-        this->layers[i] = newLayer;
+        this->layers.AddItem(newLayer);
     }
 
     // Initializing the weights array with randomized values
-    for (int i = 0; i < numOfLayers - 1; i++)
+    for (int i = 0; i < this->numOfLayers - 1; i++)
     {
         Utils::DynamicArray<Utils::DynamicArray<double>*>* currLayerWeights = new Utils::DynamicArray<Utils::DynamicArray<double>*>();
 
-        // Running over each of the neurons of the next layer
-        for (int j = 0; j < numOfNeuronsForLayers[i]; j++)
+        // Running over each of the neurons of the src layer
+        for (int j = 0; j < numOfNeuronsPerLayer[i]; j++)
         {
             Utils::DynamicArray<double>* currNeuronWeights = new Utils::DynamicArray<double>();
 
             // For each of the neurons in the current layer - add a random weight to the next layer's neuron's DynamicArray.
-            for (int k = 0; k < numOfNeuronsForLayers[i + 1]; k++)
+            for (int k = 0; k < numOfNeuronsPerLayer[i + 1]; k++)
             {
                 double randWeight = GeneralFunctions::RandomDouble(-1, 1);
                 currNeuronWeights->AddItem(randWeight);
@@ -51,44 +51,112 @@ NeuralNetwork<numOfLayers>::NeuralNetwork(const Utils::DynamicArray<int>& numOfN
     }
 }
 
-template <int numOfLayers>
-Utils::StaticArray<Utils::DynamicArray<Neuron*> ,numOfLayers>& NeuralNetwork<numOfLayers>::GetLayers() const
+NeuralNetwork::NeuralNetwork(const char* path, double (*newActivationFunction)(const double& x), double (*newActivationFunctionDerivative)(const double& x))
+{
+    // Setting the activation function
+    this->activationFunction = newActivationFunction;
+    this->activationFunctionDerivative = newActivationFunctionDerivative;
+    
+    // Reading the file content
+    std::string nnFileContent = GeneralFunctions::ReadFile(path);
+    Utils::DynamicArray<std::string> lines = GeneralFunctions::SplitString(nnFileContent, "\n");
+
+    // Reading the learning rate and the num of layers
+    this->learningRate = atof(GeneralFunctions::SplitString(lines[Constants::LEARNING_RATE_LINE], " = ")[1].c_str());
+    this->numOfLayers = atoi(GeneralFunctions::SplitString(lines[Constants::NUM_OF_LAYERS_LINE], " = ")[1].c_str());
+
+    // Reading the number of neurons per layer
+    std::string numOfNeuronsPerLayerString = GeneralFunctions::SplitString(lines[Constants::NUM_OF_NEURONS_PER_LAYER_LINE], " = ")[1];
+    Utils::DynamicArray<std::string> numOfNeuronsPerLayerSplittedString = GeneralFunctions::SplitString(numOfNeuronsPerLayerString, ",");
+    Utils::DynamicArray<int> numOfNeuronsPerLayer;
+    for (uint i = 0; i < numOfNeuronsPerLayerSplittedString.GetLength(); i++)
+        numOfNeuronsPerLayer.AddItem(atoi(numOfNeuronsPerLayerSplittedString[i].c_str()));
+
+    int currentLine = Constants::NEURONS_BIASES_STARTING_LINE;
+
+    // Creating the neurons with their biases
+    for (uint i = 0; i < this->numOfLayers; i++) // Running over each layer
+    {
+        // Creating the new layer
+        Utils::DynamicArray<Neuron*>* newLayer = new Utils::DynamicArray<Neuron*>();
+
+        // Reading the layer's biases
+        std::string currentLayerBiasesLine = GeneralFunctions::SplitString(lines[currentLine], " = ")[1];
+        Utils::DynamicArray<std::string> currentLayerBiasesStringArr = GeneralFunctions::SplitString(currentLayerBiasesLine, ",");
+        Utils::DynamicArray<double> currentLayerBiases;
+        for (uint j = 0; j < currentLayerBiasesStringArr.GetLength(); j++)
+            currentLayerBiases.AddItem(atof(currentLayerBiasesStringArr[j].c_str()));
+
+        // Running over each neuron in the layer
+        for (uint j = 0; j < numOfNeuronsPerLayer[i]; j++)
+        {
+            Neuron *n = new Neuron(0, currentLayerBiases[j]);
+            newLayer->AddItem(n);
+        }
+
+        this->layers.AddItem(newLayer);
+        currentLine++;
+    }
+
+    // currentLine is now pointing at the first line representing weights
+
+    // Creating the weights of the network
+    for (uint i = 0; i < this->numOfLayers - 1; i++)
+    {
+        Utils::DynamicArray<Utils::DynamicArray<double>*>* currLayerWeights = new Utils::DynamicArray<Utils::DynamicArray<double>*>();
+
+        // Running over each of the neurons in the src layer
+        for (uint j = 0; j < numOfNeuronsPerLayer[i]; j++)
+        {
+            // Reading the new weights from the file
+            std::string currentNeuronWeightsLine = GeneralFunctions::SplitString(lines[currentLine], " = ")[1];
+            Utils::DynamicArray<std::string> currentNeuronWeightsStringArr = GeneralFunctions::SplitString(currentNeuronWeightsLine, ",");
+
+            Utils::DynamicArray<double>* currentNeuronWeights = new Utils::DynamicArray<double>();
+            for (uint k = 0; k < currentNeuronWeightsStringArr.GetLength(); k++)
+            {
+                double newWeight = atof(currentNeuronWeightsStringArr[k].c_str());
+                currentNeuronWeights->AddItem(newWeight);
+            }
+
+            currLayerWeights->AddItem(currentNeuronWeights);
+            currentLine++;
+        }
+        this->weights.AddItem(currLayerWeights);
+    }
+}
+
+Utils::DynamicArray<Utils::DynamicArray<Neuron*>*> NeuralNetwork::GetLayers() const
 {
     return this->layers;
 }
 
-template <int numOfLayers>
-Utils::DynamicArray<Utils::DynamicArray<Utils::DynamicArray<double>>>& NeuralNetwork<numOfLayers>::GetWeights() const
+Utils::DynamicArray<Utils::DynamicArray<Utils::DynamicArray<double>*>*> NeuralNetwork::GetWeights() const
 {
-    return this->weight;
+    return this->weights;
 }
 
-template <int numOfLayers>
-Utils::DynamicArray<Neuron*>& NeuralNetwork<numOfLayers>::GetInputLayer() const
+Utils::DynamicArray<Neuron*>* NeuralNetwork::GetInputLayer() const
 {
     return this->layers[0];
 }
 
-template <int numOfLayers>
-Utils::DynamicArray<Neuron*>& NeuralNetwork<numOfLayers>::GetOutputLayer() const
+Utils::DynamicArray<Neuron*>* NeuralNetwork::GetOutputLayer() const
 {
-    return this->layers[this->layer.GetLength() - 1];
+    return this->layers[this->layers.GetLength() - 1];
 }
 
-template <int numOfLayers>
-double NeuralNetwork<numOfLayers>::GetWeight(const int& layer_num, const int& src_neuron_number, const int& dst_neuron_number)
+double NeuralNetwork::GetWeight(const int& layer_num, const int& src_neuron_number, const int& dst_neuron_number)
 {
     return this->weights[layer_num]->GetItem(src_neuron_number)->GetItem(dst_neuron_number);
 }
 
-template <int numOfLayers>
-double NeuralNetwork<numOfLayers>::GetLearningRate()
+double NeuralNetwork::GetLearningRate()
 {
     return this->learningRate;
 }
 
-template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::SetInputLayer(const Utils::DynamicArray<double>& inputs)
+void NeuralNetwork::SetInputLayer(const Utils::DynamicArray<double>& inputs)
 {
     if (this->layers[0]->GetLength() != inputs.GetLength())
     {
@@ -101,14 +169,12 @@ void NeuralNetwork<numOfLayers>::SetInputLayer(const Utils::DynamicArray<double>
     }
 }
 
-template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::SetLearningRate(const double& newLearningRate)
+void NeuralNetwork::SetLearningRate(const double& newLearningRate)
 {
     this->learningRate = newLearningRate;
 }
 
-template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::Print()
+void NeuralNetwork::Print()
 {
     std::cout << "|| Printing Neural Network ||\n";
     std::cout << "\n-- Learning Rate: " << this->learningRate << " --\n\n";
@@ -125,7 +191,8 @@ void NeuralNetwork<numOfLayers>::Print()
         }
     }
 
-    // Running over all the weightsi (Layers Loop)
+    std::cout << "~~ Printing Weights ~~\n";
+    // Running over all the weights (Layers Loop)
     for (uint i = 0; i < this->weights.GetLength(); i++)
     {
         Utils::DynamicArray<Utils::DynamicArray<double>*>* currentLayerWeights = this->weights.GetItem(i);
@@ -144,8 +211,62 @@ void NeuralNetwork<numOfLayers>::Print()
     }
 }
 
-template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::PropagateForward()
+void NeuralNetwork::SaveToFile(const char* path)
+{
+    // General: Not using the write/append functions in the GeneralFunctions for reasons of efficiency (creating / deleting the file stream every time we add somethin).
+
+    // Removing the file if it exists
+    GeneralFunctions::RemoveFile(path);
+
+    // Opening the file
+    std::fstream nnFile;
+    nnFile.open(path, std::ios::app);
+
+    // Adding the learning rate, num of layers and num of neurons per layer
+    nnFile << "learning_rate = " << this->learningRate << "\n";
+    nnFile << "num_of_layers = " << this->numOfLayers << "\n";
+    nnFile << "num_of_neurons_per_layers = ";
+
+    for (uint i = 0; i < this->layers.GetLength(); i++)
+    {
+        nnFile << this->layers[i]->GetLength();
+        if (i != this->layers.GetLength() - 1)
+            nnFile << ",";
+    }
+    nnFile << "\n";
+
+    // Adding the biases of each neuron (with a newline between each layer)
+    for (uint i = 0; i < this->layers.GetLength(); i++)
+    {
+        nnFile << "biases_layer_" << i << " = ";
+        for (uint j = 0; j < this->layers[i]->GetLength(); j++)
+        {
+            nnFile << this->layers[i]->GetItem(j)->GetBias();
+            if (j != this->layers[i]->GetLength() - 1)
+                nnFile << ",";
+        }
+        nnFile << "\n";
+    }
+
+    // Adding the weights of the network
+    for (uint i = 0; i < this->weights.GetLength(); i++)
+    {
+        for (uint j = 0; j < this->weights[i]->GetLength(); j++)
+        {
+            nnFile << "weights_layer_" << i << "_neuron_" << j << " = ";
+            for (uint k = 0; k < this->layers[i + 1]->GetLength(); k++)
+            {
+                nnFile << this->GetWeight(i, j, k);
+                if (k != this->layers[i + 1]->GetLength() - 1)
+                    nnFile << ",";
+            }
+            if (! (j == this->weights[i]->GetLength() - 1 && i == this->weights.GetLength() - 1))
+                nnFile << "\n";
+        }
+    }
+}
+
+void NeuralNetwork::PropagateForward()
 {
     // Running over all the layers from the secend layer (the first layer is the input layer)
     for (uint i = 1; i < this->layers.GetLength(); i++)
@@ -173,8 +294,7 @@ void NeuralNetwork<numOfLayers>::PropagateForward()
     }
 }
 
-template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs)
+void NeuralNetwork::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs)
 {
     // Making sure the output is in the correct length
     if (expectedOutputs.GetLength() != inputs.GetLength())
@@ -188,7 +308,7 @@ void NeuralNetwork<numOfLayers>::BackPropagate(const Utils::DynamicArray<Utils::
         this->PropagateForward();
 
         // Running over all the neuron layers from the last layer to the first
-        for (int i = numOfLayers - 1; i >= 0; i--)
+        for (int i = this->numOfLayers - 1; i >= 0; i--)
         {
             // Running over each neuron in the current layer (i)
             for (uint j = 0; j < this->layers[i]->GetLength(); j++)
@@ -196,7 +316,7 @@ void NeuralNetwork<numOfLayers>::BackPropagate(const Utils::DynamicArray<Utils::
                 Neuron* currentNeuron = this->layers[i]->GetItem(j);
 
                 // If the output layer neuron - check it's error with the expectedOutputs array
-                if (i == numOfLayers - 1)
+                if (i == this->numOfLayers - 1)
                 {
                     // Updating the neuron's delta value (error value)
                     double newDelta = expectedOutputs[currentInput].GetItem(j) - currentNeuron->GetValue();
@@ -239,14 +359,12 @@ void NeuralNetwork<numOfLayers>::BackPropagate(const Utils::DynamicArray<Utils::
     }
 }
 
-template <int numOfLayers>
-double NeuralNetwork<numOfLayers>::ActivationFunction(const double& x)
+double NeuralNetwork::ActivationFunction(const double& x)
 {
     return this->activationFunction(x);
 }
 
-template <int numOfLayers>
-double NeuralNetwork<numOfLayers>::ActivationFunctionDerivative(const double& x)
+double NeuralNetwork::ActivationFunctionDerivative(const double& x)
 {
     return this->activationFunctionDerivative(x);
 }

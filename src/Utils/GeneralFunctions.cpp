@@ -4,9 +4,38 @@
 #include <chrono>
 #include <fstream>
 
+#include "DynamicArray.h"
+
 namespace GeneralFunctions
 {
-    std::string ReadFromFile(const char* path)
+    Utils::DynamicArray<std::string> SplitString(const std::string& str, const std::string& delim=",")
+    {
+        Utils::DynamicArray<std::string> tokens;
+        size_t prev = 0, pos = 0;
+        do
+        {
+            pos = str.find(delim, prev);
+            if (pos == std::string::npos)
+                pos = str.length();
+
+            std::string token = str.substr(prev, pos-prev);
+
+            if (!token.empty())
+                tokens.AddItem(token);
+
+            prev = pos + delim.length();
+        }
+        while (pos < str.length() && prev < str.length());
+
+        return tokens;
+    }
+
+    bool RemoveFile(const char* path)
+    {
+        return remove(path) == 0;
+    }
+
+    std::string ReadFile(const char* path)
     {
         std::ifstream fileStream(path);
         std::string content((std::istreambuf_iterator<char>(fileStream)),(std::istreambuf_iterator<char>()));

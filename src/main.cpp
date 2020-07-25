@@ -8,11 +8,12 @@
 
 int main()
 {
+    /*
     Utils::DynamicArray<int> numOfNeuronsPerLayer;
     numOfNeuronsPerLayer.AddItem(3);
     numOfNeuronsPerLayer.AddItem(2);
     numOfNeuronsPerLayer.AddItem(2);
-    NeuralNetwork<3> nn(numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
+    NeuralNetwork nn(3, numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
     Utils::DynamicArray<Utils::DynamicArray<double>> inputs;
     Utils::DynamicArray<double> singleInput;
     singleInput.AddItem(-0.8);
@@ -28,8 +29,11 @@ int main()
     for (int i = 0; i < 200; i++)
     {
         nn.BackPropagate(inputs, outputs);
-        log(" ~~~~~~~~~~~~~~~~~~~~~~~~~ ");
-        nn.Print();
     }
+    nn.Print();
+    nn.SaveToFile("./myFirstNeuralNetwork.nn");
+    */
+    NeuralNetwork nn("./tmp/myFirstNeuralNetwork.nn", ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
+    nn.Print();
 }
 

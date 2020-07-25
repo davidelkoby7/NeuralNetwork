@@ -11,12 +11,14 @@ NeuralNetwork.h
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/NeuralNetwork.h
 
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/NeuralNetwork.h
-../Utils/StaticArray.h
-/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
 ../Utils/DynamicArray.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.h
 ../Utils/ActivationFunctions.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/ActivationFunctions.h
+../Utils/Constants.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/Constants.h
+fstream
+-
 Neuron.h
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.h
 NeuralNetwork.cpp
@@ -59,16 +61,8 @@ chrono
 -
 fstream
 -
-
-/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.cpp
-StaticArray.h
-/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
-
-/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
-iostream
--
-StaticArray.cpp
-/home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.cpp
+DynamicArray.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.h
 
 /home/davidalk/Documents/neuralNetwork/src/main.cpp
 iostream

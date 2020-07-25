@@ -10,7 +10,5 @@ CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/Constants.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/DynamicArray.cpp
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/DynamicArray.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/GeneralFunctions.cpp
-CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/StaticArray.cpp
-CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/StaticArray.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/main.cpp
 
