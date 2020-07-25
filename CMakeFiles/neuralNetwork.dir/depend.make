@@ -5,6 +5,8 @@ CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/NeuralNetwork/NeuralNetwork.cpp
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/NeuralNetwork/NeuralNetwork.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/NeuralNetwork/Neuron.cpp
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/NeuralNetwork/Neuron.h
+CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/ActivationFunctions.h
+CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/Constants.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/DynamicArray.cpp
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/DynamicArray.h
 CMakeFiles/neuralNetwork.dir/src/main.cpp.o: src/Utils/GeneralFunctions.cpp

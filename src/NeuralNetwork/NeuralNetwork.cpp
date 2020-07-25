@@ -6,8 +6,13 @@ NeuralNetwork<numOfLayers>::~NeuralNetwork()
 }
 
 template <int numOfLayers>
-NeuralNetwork<numOfLayers>::NeuralNetwork(const DynamicArray<int>& numOfNeuronsForLayers)
+NeuralNetwork<numOfLayers>::NeuralNetwork(const Utils::DynamicArray<int>& numOfNeuronsForLayers, double (*newActivationFunction)(const double& x), double (*newActivationFunctionDerivative)(const double& x), const double& newLeariningRate)
 {
+    // Setting the activation function
+    this->activationFunction = newActivationFunction;
+    this->activationFunctionDerivative = newActivationFunctionDerivative;
+    this->learningRate = newLeariningRate;
+
     // Initializing a random valued layers for the network
     for (int i = 0; i < numOfLayers; i++)
     {
@@ -40,7 +45,6 @@ NeuralNetwork<numOfLayers>::NeuralNetwork(const DynamicArray<int>& numOfNeuronsF
                 double randWeight = GeneralFunctions::RandomDouble(-1, 1);
                 currNeuronWeights->AddItem(randWeight);
             }
-            currNeuronWeights->Print();
             currLayerWeights->AddItem(currNeuronWeights);
         }
         this->weights.AddItem(currLayerWeights);
@@ -78,26 +82,45 @@ double NeuralNetwork<numOfLayers>::GetWeight(const int& layer_num, const int& sr
 }
 
 template <int numOfLayers>
-void NeuralNetwork<numOfLayers>::SetInputLayer(const DynamicArray<double>& inputs)
+double NeuralNetwork<numOfLayers>::GetLearningRate()
 {
-    for (int i = 0; i < this->layers[0].GetLength(); i++)
+    return this->learningRate;
+}
+
+template <int numOfLayers>
+void NeuralNetwork<numOfLayers>::SetInputLayer(const Utils::DynamicArray<double>& inputs)
+{
+    if (this->layers[0]->GetLength() != inputs.GetLength())
     {
-        this->layers[0][i] = inputs[i];
+        throw "Input given not in the correct length!";
     }
+
+    for (uint i = 0; i < this->layers[0]->GetLength(); i++)
+    {
+        this->layers[0]->GetItem(i)->SetValue(inputs[i]);
+    }
+}
+
+template <int numOfLayers>
+void NeuralNetwork<numOfLayers>::SetLearningRate(const double& newLearningRate)
+{
+    this->learningRate = newLearningRate;
 }
 
 template <int numOfLayers>
 void NeuralNetwork<numOfLayers>::Print()
 {
+    std::cout << "|| Printing Neural Network ||\n";
+    std::cout << "\n-- Learning Rate: " << this->learningRate << " --\n\n";
     // Running over the layers
     for (uint i = 0; i < this->layers.GetLength(); i++)
     {
-        std::cout << "~~ Printing layer number: " << i << " ~~" << std::endl;
+        std::cout << "~~ Printing layer number: " << i << " ~~\n";
 
         // Running over each Neuron in that layer
         for (uint j = 0; j < this->layers[i]->GetLength(); j++)
         {
-            std::cout << "@@ Printing neuron number: " << j << " @@" << std::endl;
+            std::cout << "@@ Printing neuron number: " << j << " @@\n";
             this->layers[i]->GetItem(j)->PrintNoNextLayer();
         }
     }
@@ -142,13 +165,89 @@ void NeuralNetwork<numOfLayers>::PropagateForward()
             {
                 Neuron* previousLayerNeuron = previousLayer->GetItem(k);
                 double currentWeight = this->GetWeight(i - 1, k, j);
-                std::cout << "currWeight: " << currentWeight << ", currValue: " << previousLayerNeuron->GetValue() << std::endl;
                 newCurrentNeuronValue += previousLayerNeuron->GetValue() * currentWeight;
             }
             newCurrentNeuronValue += currentNeuron->GetBias();
-            std::cout << newCurrentNeuronValue << std::endl;
             currentNeuron->SetValue(newCurrentNeuronValue);
         }
     }
+}
+
+template <int numOfLayers>
+void NeuralNetwork<numOfLayers>::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs)
+{
+    // Making sure the output is in the correct length
+    if (expectedOutputs.GetLength() != inputs.GetLength())
+        throw "Mismatch in the length of the inputs and the outputs";
+
+    // Running over all the training data
+    for (uint currentInput = 0; currentInput < inputs.GetLength(); currentInput++)
+    {
+        // Setting the input layer to the given data
+        this->SetInputLayer(inputs[currentInput]);
+        this->PropagateForward();
+
+        // Running over all the neuron layers from the last layer to the first
+        for (int i = numOfLayers - 1; i >= 0; i--)
+        {
+            // Running over each neuron in the current layer (i)
+            for (uint j = 0; j < this->layers[i]->GetLength(); j++)
+            {
+                Neuron* currentNeuron = this->layers[i]->GetItem(j);
+
+                // If the output layer neuron - check it's error with the expectedOutputs array
+                if (i == numOfLayers - 1)
+                {
+                    // Updating the neuron's delta value (error value)
+                    double newDelta = expectedOutputs[currentInput].GetItem(j) - currentNeuron->GetValue();
+                    double activationDerivativeResult = this->activationFunctionDerivative(currentNeuron->GetValue());
+                    newDelta *= activationDerivativeResult;
+                    currentNeuron->SetDelta(newDelta);
+
+                    // Improving the bias of that neuron
+                    currentNeuron->SetBias(currentNeuron->GetBias() + this->learningRate * newDelta);
+                }
+                else // If the neuron is not in the output layer
+                {
+                    // Calculating the new delta (error) of the neuron
+                    double newDelta = 0;
+
+                    // Adding the influence of this neuron over the next layer neurons
+                    for (uint k = 0; k < this->layers[i + 1]->GetLength(); k++)
+                    {
+                        double deltaAddition;
+                        deltaAddition = this->layers[i + 1]->GetItem(k)->GetDelta();
+                        deltaAddition *= this->GetWeight(i, j, k);
+                        newDelta += deltaAddition;
+                    }
+
+                    newDelta *= this->ActivationFunctionDerivative(currentNeuron->GetValue());
+                    currentNeuron->SetDelta(newDelta);
+
+                    // Updating the bias of that neuron
+                    currentNeuron->SetBias(currentNeuron->GetBias() + this->learningRate * newDelta);
+
+                    // Running over all the weights connected to that neuron and improving them
+                    for (uint k = 0; k < this->layers[i + 1]->GetLength(); k++)
+                    {
+                        double& currentWeight = this->weights[i]->GetItem(j)->GetItem(k);
+                        currentWeight = currentNeuron->GetValue() * this->layers[i + 1]->GetItem(k)->GetDelta() * this->learningRate;
+                    }
+                }
+            }
+        }
+    }
+}
+
+template <int numOfLayers>
+double NeuralNetwork<numOfLayers>::ActivationFunction(const double& x)
+{
+    return this->activationFunction(x);
+}
+
+template <int numOfLayers>
+double NeuralNetwork<numOfLayers>::ActivationFunctionDerivative(const double& x)
+{
+    return this->activationFunctionDerivative(x);
 }
 

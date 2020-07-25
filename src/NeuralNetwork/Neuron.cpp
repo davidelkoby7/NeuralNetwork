@@ -9,6 +9,7 @@ Neuron::Neuron()
     // In case of empty constructor - randomize values
     this->m_value = GeneralFunctions::RandomDouble(-1, 1);
     this->m_bias = GeneralFunctions::RandomDouble(-1, 1);
+    this->m_delta = 0;
 }
 
 Neuron::Neuron(const double& newValue, const double& newBias, const Utils::DynamicArray<Neuron*>& nextLayerNeurons)
@@ -32,6 +33,11 @@ void Neuron::SetBias(const double& newBias)
     this->m_bias = newBias;
 }
 
+void Neuron::SetDelta(const double& newDelta)
+{
+    this->m_delta = newDelta;
+}
+
 double Neuron::GetValue() const
 {
     return this->m_value;
@@ -40,6 +46,11 @@ double Neuron::GetValue() const
 double Neuron::GetBias() const
 {
     return this->m_bias;
+}
+
+double Neuron::GetDelta() const
+{
+    return this->m_delta;
 }
 
 Utils::DynamicArray<Neuron*>& Neuron::GetNextLayerNeurons()
@@ -53,6 +64,8 @@ std::string Neuron::ToStringNoNextLayer() const
     neuronString += std::to_string(this->m_value);
     neuronString += ",\nbias: ";
     neuronString += std::to_string(this->m_bias);
+    neuronString += ",\ndelta: ";
+    neuronString += std::to_string(this->m_delta);
     neuronString += "\n}";
     return neuronString;
 }
@@ -63,6 +76,8 @@ std::string Neuron::ToString() const
     neuronString += std::to_string(this->GetValue());
     neuronString += ",\nbias: ";
     neuronString += std::to_string(this->GetBias());
+    neuronString += ",\ndelta: ";
+    neuronString += std::to_string(this->m_delta);
     neuronString += ",\nnextLayerNeurons:\n{\n";
 
     size_t nextLayerLength = this->m_nextLayerNeurons.GetLength();

@@ -15,6 +15,8 @@ NeuralNetwork.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.h
 ../Utils/DynamicArray.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.h
+../Utils/ActivationFunctions.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/ActivationFunctions.h
 Neuron.h
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.h
 NeuralNetwork.cpp
@@ -31,6 +33,14 @@ Neuron.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
 Neuron.cpp
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/Neuron.cpp
+
+/home/davidalk/Documents/neuralNetwork/src/Utils/ActivationFunctions.h
+bits/stdc++.h
+-
+Constants.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/Constants.h
+
+/home/davidalk/Documents/neuralNetwork/src/Utils/Constants.h
 
 /home/davidalk/Documents/neuralNetwork/src/Utils/DynamicArray.cpp
 DynamicArray.h
@@ -65,4 +75,6 @@ Utils/GeneralFunctions.cpp
 /home/davidalk/Documents/neuralNetwork/src/Utils/GeneralFunctions.cpp
 NeuralNetwork/NeuralNetwork.h
 /home/davidalk/Documents/neuralNetwork/src/NeuralNetwork/NeuralNetwork.h
+Utils/ActivationFunctions.h
+/home/davidalk/Documents/neuralNetwork/src/Utils/ActivationFunctions.h
 

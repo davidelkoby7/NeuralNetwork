@@ -1,7 +1,5 @@
 #include "DynamicArray.h"
 
-using namespace Utils;
-
 template<typename T>
 Utils::DynamicArray<T>::~DynamicArray()
 {
