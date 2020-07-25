@@ -2,9 +2,34 @@
 
 #include <stdlib.h>
 #include <chrono>
+#include <fstream>
 
 namespace GeneralFunctions
 {
+    std::string ReadFromFile(const char* path)
+    {
+        std::ifstream fileStream(path);
+        std::string content((std::istreambuf_iterator<char>(fileStream)),(std::istreambuf_iterator<char>()));
+        content = content.substr(0, content.size() - 1); // Removing the added newline
+        return content;
+    }
+
+    void WriteToFile(const char* path, const char* data)
+    {
+        std::ofstream outfile;
+        outfile.open(path);
+        outfile << data << "\n";
+        outfile.close();
+    }
+
+    void AppendToFile(const char* path, const char* data)
+    {
+        std::ofstream outfile;
+        outfile.open(path, std::ios::app);
+        outfile << data << "\n";
+        outfile.close();
+    }
+
     size_t StringLength(const char* string)
     {
         size_t length = 0;
@@ -16,12 +41,12 @@ namespace GeneralFunctions
     int RandomInt(const int& minValue, const int& maxValue)
     {
         // Getting current time in microsecends
-        std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+        auto now = std::chrono::high_resolution_clock::now();
         auto duration = now.time_since_epoch();
-        auto micros = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+        auto randSeed = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
 
         // Initializing random's seed
-        srand(micros);
+        srand(randSeed);
 
         // Getting a rand number in the given range
         int randNum = rand() % (maxValue - minValue);

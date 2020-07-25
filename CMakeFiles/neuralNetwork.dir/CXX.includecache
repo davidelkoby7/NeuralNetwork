@@ -57,6 +57,8 @@ stdlib.h
 -
 chrono
 -
+fstream
+-
 
 /home/davidalk/Documents/neuralNetwork/src/Utils/StaticArray.cpp
 StaticArray.h
