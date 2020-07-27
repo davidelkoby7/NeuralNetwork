@@ -8,6 +8,27 @@
 
 namespace GeneralFunctions
 {
+    char* ReadBinaryFile(const char* path)
+    {
+        std::streampos size;
+        char * memblock;
+
+        std::ifstream file (path, std::ios::in|std::ios::binary|std::ios::ate);
+        if(file.is_open())
+        {
+            size = file.tellg();
+            memblock = new char [size];
+            file.seekg (0,std::ios::beg);
+            file.read (memblock, size);
+            file.close();
+
+            std::cout << memblock << std::endl;
+            std::cout << "the entire file content is in memory\n";
+            return memblock;
+        }
+        std::cout << "Unable to open file\n";
+    }
+
     Utils::DynamicArray<std::string> SplitString(const std::string& str, const std::string& delim=",")
     {
         Utils::DynamicArray<std::string> tokens;
