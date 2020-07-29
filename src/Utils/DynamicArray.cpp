@@ -14,6 +14,14 @@ Utils::DynamicArray<T>::DynamicArray()
 }
 
 template<typename T>
+Utils::DynamicArray<T>::DynamicArray(const int& initialLength)
+{
+    this->array_length = initialLength;
+    T* new_array = new T[initialLength];
+    this->array = new_array;
+}
+
+template<typename T>
 void Utils::DynamicArray<T>::Print()
 {
     for (size_t i = 0; i < this->array_length; i++)
@@ -87,5 +95,11 @@ void Utils::DynamicArray<T>::ResetArray(T resetValue)
 {
     for (int i = 0; i < this->array_length; i++)
         this->array[i] = resetValue;
+}
+
+template <typename T>
+void Utils::DynamicArray<T>::SetItem(const int& index,const T& newValue)
+{
+    this->array[index] = newValue;
 }
 

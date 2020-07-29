@@ -35,6 +35,11 @@ void Neuron::SetValue(const double& newValue)
     this->m_value = newValue;
 }
 
+void Neuron::SetValueNoActivation(const double& newValue)
+{
+    this->m_value_no_activation = newValue;
+}
+
 void Neuron::SetBias(const double& newBias)
 {
     this->m_bias = newBias;
@@ -48,6 +53,11 @@ void Neuron::SetDelta(const double& newDelta)
 double Neuron::GetValue() const
 {
     return this->m_value;
+}
+
+double Neuron::GetValueNoActivation() const
+{
+    return this->m_value_no_activation;
 }
 
 double Neuron::GetBias() const
@@ -69,6 +79,8 @@ std::string Neuron::ToStringNoNextLayer() const
 {
     std::string neuronString = "{\nvalue: ";
     neuronString += std::to_string(this->m_value);
+    neuronString += ",\nvalue_no_activation: ";
+    neuronString += std::to_string(this->m_value_no_activation);
     neuronString += ",\nbias: ";
     neuronString += std::to_string(this->m_bias);
     neuronString += ",\ndelta: ";
@@ -81,6 +93,8 @@ std::string Neuron::ToString() const
 {
     std::string neuronString = "{\nvalue: ";
     neuronString += std::to_string(this->GetValue());
+    neuronString += ",\nvalue_no_activation: ";
+    neuronString += std::to_string(this->m_value_no_activation);
     neuronString += ",\nbias: ";
     neuronString += std::to_string(this->GetBias());
     neuronString += ",\ndelta: ";

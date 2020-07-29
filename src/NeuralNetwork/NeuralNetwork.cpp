@@ -278,7 +278,6 @@ void NeuralNetwork::PropagateForward()
         for (uint j = 0; j < currentLayer->GetLength(); j++)
         {
             Neuron* currentNeuron = currentLayer->GetItem(j);
-            currentNeuron->SetValue(0);
             double newCurrentNeuronValue = 0;
 
             // Running over each neuron in the previous layer to propagate it forward
@@ -289,7 +288,10 @@ void NeuralNetwork::PropagateForward()
                 newCurrentNeuronValue += previousLayerNeuron->GetValue() * currentWeight;
             }
             newCurrentNeuronValue += currentNeuron->GetBias();
-            currentNeuron->SetValue(newCurrentNeuronValue);
+            currentNeuron->SetValueNoActivation(newCurrentNeuronValue); // Setting the value without the activation
+
+            newCurrentNeuronValue = this->activationFunction(newCurrentNeuronValue);
+            currentNeuron->SetValue(newCurrentNeuronValue); // Setting the value with the activation
         }
     }
 }
@@ -303,6 +305,8 @@ void NeuralNetwork::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<
     // Running over all the training data
     for (uint currentInput = 0; currentInput < inputs.GetLength(); currentInput++)
     {
+        if (currentInput % 100 == 0)
+            std::cout << "currentInput: " << currentInput << "\n";
         // Setting the input layer to the given data
         this->SetInputLayer(inputs[currentInput]);
         this->PropagateForward();
@@ -320,12 +324,12 @@ void NeuralNetwork::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<
                 {
                     // Updating the neuron's delta value (error value)
                     double newDelta = expectedOutputs[currentInput].GetItem(j) - currentNeuron->GetValue();
-                    double activationDerivativeResult = this->activationFunctionDerivative(currentNeuron->GetValue());
+                    double activationDerivativeResult = this->activationFunctionDerivative(currentNeuron->GetValueNoActivation());
                     newDelta *= activationDerivativeResult;
                     currentNeuron->SetDelta(newDelta);
 
                     // Improving the bias of that neuron
-                    currentNeuron->SetBias(currentNeuron->GetBias() + this->learningRate * newDelta);
+                    currentNeuron->SetBias(currentNeuron->GetBias() - this->learningRate * newDelta);
                 }
                 else // If the neuron is not in the output layer
                 {
@@ -341,17 +345,17 @@ void NeuralNetwork::BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<
                         newDelta += deltaAddition;
                     }
 
-                    newDelta *= this->ActivationFunctionDerivative(currentNeuron->GetValue());
+                    newDelta *= this->ActivationFunctionDerivative(currentNeuron->GetValueNoActivation());
                     currentNeuron->SetDelta(newDelta);
 
                     // Updating the bias of that neuron
-                    currentNeuron->SetBias(currentNeuron->GetBias() + this->learningRate * newDelta);
+                    currentNeuron->SetBias(currentNeuron->GetBias() - this->learningRate * newDelta);
 
                     // Running over all the weights connected to that neuron and improving them
                     for (uint k = 0; k < this->layers[i + 1]->GetLength(); k++)
                     {
                         double& currentWeight = this->weights[i]->GetItem(j)->GetItem(k);
-                        currentWeight = currentNeuron->GetValue() * this->layers[i + 1]->GetItem(k)->GetDelta() * this->learningRate;
+                        currentWeight -= currentNeuron->GetValue() * this->layers[i + 1]->GetItem(k)->GetDelta() * this->learningRate;
                     }
                 }
             }

@@ -21,9 +21,6 @@ namespace GeneralFunctions
             file.seekg (0,std::ios::beg);
             file.read (memblock, size);
             file.close();
-
-            std::cout << memblock << std::endl;
-            std::cout << "the entire file content is in memory\n";
             return memblock;
         }
         std::cout << "Unable to open file\n";

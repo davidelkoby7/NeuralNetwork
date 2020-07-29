@@ -7,6 +7,7 @@ class Neuron
 {
     private:
         double m_value;
+        double m_value_no_activation;
         double m_bias;
         double m_delta; // Holds the error of that neuron for the learning process
         Utils::DynamicArray<Neuron*> m_nextLayerNeurons;
@@ -19,11 +20,13 @@ class Neuron
         
         // Setters
         void SetValue(const double& newValue);
+        void SetValueNoActivation(const double& newValue);
         void SetBias(const double& newBias);
         void SetDelta(const double& newDelta);
         
         // Getters
         double GetValue() const;
+        double GetValueNoActivation() const;
         double GetBias() const;
         double GetDelta() const;
         Utils::DynamicArray<Neuron*>& GetNextLayerNeurons();
