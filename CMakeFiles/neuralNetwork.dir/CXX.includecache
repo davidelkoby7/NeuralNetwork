@@ -47,8 +47,6 @@ Neuron.cpp
 /home/davidalk/Documents/neuralNetwork/src/Utils/ActivationFunctions.h
 bits/stdc++.h
 -
-cmath
--
 Constants.h
 /home/davidalk/Documents/neuralNetwork/src/Utils/Constants.h
 

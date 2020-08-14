@@ -38,7 +38,10 @@ namespace MNISTParser
             for (size_t j = 0; j < Constants::MNIST_IMAGE_SIZE; j++)
             {
                 //double newValue = static_cast<double>(trainData[i * Constants::MNIST_IMAGE_SIZE + j + Constants::MNIST_TRAIN_DATA_START_OFFSET]);
-                double newValue = static_cast<double>(trainData[i * Constants::MNIST_IMAGE_SIZE + j + Constants::MNIST_TRAIN_DATA_START_OFFSET]) / 255;
+                double newValue = static_cast<double>(trainData[i * Constants::MNIST_IMAGE_SIZE + j + Constants::MNIST_TRAIN_DATA_START_OFFSET]);
+                if (newValue < 0)
+                    newValue = 256 + newValue;
+                newValue = newValue / 255;
                 currentImage->SetItem(j, newValue);
             }
 

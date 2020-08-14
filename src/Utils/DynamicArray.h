@@ -13,6 +13,7 @@ namespace Utils
         public:
             ~DynamicArray();
             DynamicArray();
+            DynamicArray(const DynamicArray& copiedArray);
             DynamicArray(const int& initialLength);
             void Print();
             size_t GetLength() const;
@@ -22,6 +23,7 @@ namespace Utils
             T& GetItem(int index);
             void SetItem(const int& index, const T& newValue);
             T& operator [](int index) const;
+            DynamicArray& operator=(const DynamicArray& copiedArray);
             void ResetArray(T resetValue);
     };
 }

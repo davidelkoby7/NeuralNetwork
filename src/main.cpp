@@ -9,33 +9,6 @@
 
 int main()
 {
-    /*
-    Utils::DynamicArray<int> numOfNeuronsPerLayer;
-    numOfNeuronsPerLayer.AddItem(3);
-    numOfNeuronsPerLayer.AddItem(2);
-    numOfNeuronsPerLayer.AddItem(2);
-    NeuralNetwork nn(3, numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
-    Utils::DynamicArray<Utils::DynamicArray<double>> inputs;
-    Utils::DynamicArray<double> singleInput;
-    singleInput.AddItem(-0.8);
-    singleInput.AddItem(0.2);
-    singleInput.AddItem(0.4);
-    inputs.AddItem(singleInput);
-    Utils::DynamicArray<Utils::DynamicArray<double>> outputs;
-    Utils::DynamicArray<double> singleOutput;
-    singleOutput.AddItem(0);
-    singleOutput.AddItem(1);
-    outputs.AddItem(singleOutput);
-    nn.Print();
-    for (int i = 0; i < 200; i++)
-    {
-        nn.BackPropagate(inputs, outputs);
-    }
-    nn.Print();
-    nn.SaveToFile("./myFirstNeuralNetwork.nn");
-    NeuralNetwork nn("./tmp/myFirstNeuralNetwork.nn", ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
-    nn.Print();
-    */
     // Getting the inputs and outputs of the MNIST Dataset
     Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTrainInputs();
     Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTrainOutputs();
@@ -45,9 +18,8 @@ int main()
     Utils::DynamicArray<int> numOfNeuronsPerLayer;
     numOfNeuronsPerLayer.AddItem(784);
     numOfNeuronsPerLayer.AddItem(200);
-    numOfNeuronsPerLayer.AddItem(200);
     numOfNeuronsPerLayer.AddItem(10);
-    NeuralNetwork* nn = new NeuralNetwork(4, numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
+    NeuralNetwork* nn = new NeuralNetwork(numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
     nn->SaveToFile("./untrainedMNIST.nn");
     nn->BackPropagate(*trainInputs, *trainOutputs);
     nn->SaveToFile("./trainedMNIST.nn");
@@ -56,17 +28,25 @@ int main()
     */
 
     NeuralNetwork* nn = new NeuralNetwork("/home/davidalk/Documents/neuralNetwork/trainedMNIST.nn", ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
-    for (size_t currIn = 0; currIn < 10; currIn++)
+    int mismatchCount = 0;
+    for (size_t currIn = 0; currIn < trainInputs->GetLength(); currIn++)
     {
+        if (currIn % 100 == 0)
+        {
+            std::cout << "currIn: " << currIn << "\nCurrent mismatchCount: " << mismatchCount << "\n";
+        }
         nn->SetInputLayer(trainInputs->GetItem(currIn));
         nn->PropagateForward();
-        Utils::DynamicArray<Neuron*>* outputLayer = nn->GetOutputLayer();
-        for (size_t i = 0; i < outputLayer->GetLength(); i++)
+        int mostActiveIndex = nn->GetMostActiveNeuronIndex();
+        int desiredIndexOutput;
+        for (size_t item = 0; item < trainOutputs->GetItem(currIn).GetLength(); item++)
         {
-            std::cout << "i: " << i << std::endl;
-            std::cout << "Value: " << outputLayer->GetItem(i)->GetValue() << "\n";
+            if (trainOutputs->GetItem(currIn).GetItem(item) == 1)
+                desiredIndexOutput = item;
         }
-        trainOutputs->GetItem(currIn).Print();
+        if (desiredIndexOutput != mostActiveIndex)
+            mismatchCount++;
     } 
+    std::cout << "mismatchCount: " << mismatchCount << "\n";
 }
 

@@ -14,6 +14,17 @@ Utils::DynamicArray<T>::DynamicArray()
 }
 
 template<typename T>
+Utils::DynamicArray<T>::DynamicArray(const DynamicArray& copiedArray)
+{
+    uint initialLength = copiedArray.array_length;
+    this->array_length = initialLength;
+    T* new_array = new T[initialLength];
+    for (size_t i = 0; i < initialLength; i++)
+        new_array[i] = copiedArray[i];
+    this->array = new_array;
+}
+
+template<typename T>
 Utils::DynamicArray<T>::DynamicArray(const int& initialLength)
 {
     this->array_length = initialLength;
@@ -88,6 +99,17 @@ template<typename T>
 T& Utils::DynamicArray<T>::operator[](int index) const
 {
     return this->array[index];
+}
+
+template<typename T>
+Utils::DynamicArray<T>& Utils::DynamicArray<T>::operator=(const DynamicArray<T>& copiedArray)
+{
+    uint initialLength = copiedArray.array_length;
+    this->array_length = initialLength;
+    T* new_array = new T[initialLength];
+    for (size_t i = 0; i < initialLength; i++)
+        new_array[i] = copiedArray[i];
+    this->array = new_array;
 }
 
 template <typename T>

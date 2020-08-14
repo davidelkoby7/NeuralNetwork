@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/neuralNetwork.dir/src/main.cpp.o"
-  "neuralNetwork.pdb"
   "neuralNetwork"
+  "neuralNetwork.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

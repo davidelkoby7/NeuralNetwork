@@ -25,7 +25,7 @@ class NeuralNetwork
         // Destructor and Constructors
         ~NeuralNetwork();
         NeuralNetwork() = delete;
-        NeuralNetwork(const int& numOfLayers, const Utils::DynamicArray<int>& numOfNeuronsPerLayers, double (*newActivationFunction)(const double& x) = ActivationFunctions::ReLU, double (*newActivationFunctionDerivative)(const double& x) = ActivationFunctions::ReLUDerivative, const double& newLeariningRate = 0.0001);
+        NeuralNetwork(const Utils::DynamicArray<int>& numOfNeuronsPerLayers, double (*newActivationFunction)(const double& x) = ActivationFunctions::ReLU, double (*newActivationFunctionDerivative)(const double& x) = ActivationFunctions::ReLUDerivative, const double& newLeariningRate = 0.1);
         NeuralNetwork(const char* path, double (*newActivationFunction)(const double& x) = ActivationFunctions::ReLU, double (*newActivationFunctionDerivative)(const double& x) = ActivationFunctions::ReLUDerivative);
         
         // Getters
@@ -50,6 +50,7 @@ class NeuralNetwork
         // Network Functionallity
         void PropagateForward();
         void BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs);
+        int GetMostActiveNeuronIndex();
 };
 
 #include "NeuralNetwork.cpp"
