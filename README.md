@@ -83,7 +83,7 @@ To do that, just:
     - Use the ForwardPropagate() function. That function will take the input you set before and feed it forward in the network. No need for any parameters.
     - To get the result, just call the `GetOutputLayer()` function. This will return a `Utils::DynamicArray<Utils::DynamicArray<double>>`, where each item is the output of a neuron in the output layer.
 
-##That's it!
+## That's it!
 With those easy 3 steps you created your neural network, trained it, and got predictions from it.
 Hope you will find that project usefull :)
 
