@@ -22,7 +22,7 @@ The constructor takes only one parameter as a must (the DynamicArray containing 
     - activationFunctionDerivative: When choosing an activation function, you also need to supply a function fo it's derivative.
     - learningRate: You can choose your learning rate for your network (By default - 0.1).
 
-####Example:
+#### Example:
 
 ```c++
 #include "NeuralNetwork/NeuralNetwork.h"
