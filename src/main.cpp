@@ -10,11 +10,11 @@
 int main()
 {
     // Getting the inputs and outputs of the MNIST Dataset
-    Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTrainInputs();
-    Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTrainOutputs();
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTestInputs();
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTestOutputs();
 
     /*
-    // Creating a nn for that data set (input - 784 neurons, output - 10 neurons, 2 hidden layers of 200 neurons)
+    // Creating a nn for that data set (input - 784 neurons, output - 10 neurons, 1 hidden layer of 200 neurons)
     Utils::DynamicArray<int> numOfNeuronsPerLayer;
     numOfNeuronsPerLayer.AddItem(784);
     numOfNeuronsPerLayer.AddItem(200);
