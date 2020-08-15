@@ -85,5 +85,3 @@ To do that, just:
 
 ## That's it!
 With those easy 3 steps you created your neural network, trained it, and got predictions from it.
-Hope you will find that project usefull :)
-
