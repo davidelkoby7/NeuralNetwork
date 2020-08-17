@@ -9,11 +9,11 @@
 
 int main()
 {
-    // Getting the inputs and outputs of the MNIST Dataset
-    Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTestInputs();
-    Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTestOutputs();
-
     /*
+    // Getting the inputs and outputs of the MNIST Dataset
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTrainInputs();
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTrainOutputs();
+
     // Creating a nn for that data set (input - 784 neurons, output - 10 neurons, 1 hidden layer of 200 neurons)
     Utils::DynamicArray<int> numOfNeuronsPerLayer;
     numOfNeuronsPerLayer.AddItem(784);
@@ -21,11 +21,15 @@ int main()
     numOfNeuronsPerLayer.AddItem(10);
     NeuralNetwork* nn = new NeuralNetwork(numOfNeuronsPerLayer, ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
     nn->SaveToFile("./untrainedMNIST.nn");
-    nn->BackPropagate(*trainInputs, *trainOutputs);
+    nn->BackPropagate(*trainInputs, *trainOutputs, 3);
     nn->SaveToFile("./trainedMNIST.nn");
     std::cout << trainInputs->GetLength() << "\n";
     std::cout << trainOutputs->GetLength() << "\n";
     */
+
+    // Getting the inputs and outputs of the MNIST Dataset
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainInputs = MNISTParser::GetTestInputs();
+    Utils::DynamicArray<Utils::DynamicArray<double>>* trainOutputs = MNISTParser::GetTestOutputs();
 
     NeuralNetwork* nn = new NeuralNetwork("/home/davidalk/Documents/neuralNetwork/trainedMNIST.nn", ActivationFunctions::Sigmoid, ActivationFunctions::SigmoidDerivative);
     int mismatchCount = 0;

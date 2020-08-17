@@ -49,7 +49,7 @@ class NeuralNetwork
 
         // Network Functionallity
         void PropagateForward();
-        void BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs);
+        void BackPropagate(const Utils::DynamicArray<Utils::DynamicArray<double>>& inputs, const Utils::DynamicArray<Utils::DynamicArray<double>>& expectedOutputs, uint reps = 1);
         int GetMostActiveNeuronIndex();
 };
 
