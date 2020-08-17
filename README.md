@@ -14,7 +14,7 @@ To test the NeuralNetwork implementation, I downloaded the MNIST dataset of hand
 
 I constructed a network with 784 neurons, 200 hidden neurons, and 10 output neurons to indicate the output.
 
-The final result (of that setup, probably can make it better with a different setup / learning rate) was 7.63% error.
+The final result (of that setup, probably can make it better with a different setup / learning rate) was 4.79% error.
 
 ## Using the NeuralNetwork Class:
 ### Step One: Creating the Neural Network object
